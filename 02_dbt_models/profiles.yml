@@ -1,0 +1,7 @@
+soccer_performance:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../data/soccer_performance.duckdb
+      threads: 4

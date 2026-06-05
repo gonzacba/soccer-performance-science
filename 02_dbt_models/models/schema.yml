@@ -1,0 +1,72 @@
+version: 2
+
+models:
+  - name: base_wellness
+    description: "Cleaned and typed wellness metrics per player per date"
+    columns:
+      - name: date
+        data_tests: [not_null]
+      - name: player_id
+        data_tests: [not_null]
+      - name: team
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['TeamA', 'TeamB']
+
+  - name: base_training_load
+    description: "Cleaned and typed training load metrics per player per date"
+    columns:
+      - name: date
+        data_tests: [not_null]
+      - name: player_id
+        data_tests: [not_null]
+      - name: team
+        data_tests:
+          - accepted_values:
+              values: ['TeamA', 'TeamB']
+
+  - name: stg_player_daily
+    description: "Wellness and training load joined — one row per player per date"
+    columns:
+      - name: date
+        data_tests: [not_null]
+      - name: player_id
+        data_tests: [not_null]
+      - name: team
+        data_tests:
+          - accepted_values:
+              values: ['TeamA', 'TeamB']
+      - name: wellness_score
+        data_tests:
+          - not_null:
+              config:
+                where: "fatigue IS NOT NULL"
+
+  - name: mart_readiness
+    description: "Daily player readiness status — main dashboard model"
+    columns:
+      - name: date
+        data_tests: [not_null]
+      - name: player_id
+        data_tests: [not_null]
+      - name: readiness_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Ready', 'Monitor', 'Load-Managed']
+
+  - name: mart_injury_risk
+    description: "Daily injury risk flags per player based on ACWR and wellness"
+    columns:
+      - name: date
+        data_tests: [not_null]
+      - name: player_id
+        data_tests: [not_null]
+      - name: risk_level
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Normal', 'Elevated', 'High']
+      - name: acwr_spike_flag
+        data_tests: [not_null]

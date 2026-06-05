@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: soccermon
+    description: "SoccerMon athlete monitoring dataset — processed Parquet files"
+    meta:
+      dataset: SoccerMon
+      license: CC BY 4.0
+    tables:
+      - name: wellness
+        description: "Daily subjective wellness scores per player"
+        meta:
+          external_location: "read_parquet('../data/processed/wellness.parquet')"
+      - name: training_load
+        description: "Daily training load metrics per player"
+        meta:
+          external_location: "read_parquet('../data/processed/training_load.parquet')"
+      - name: injury
+        description: "Injury reports per player"
+        meta:
+          external_location: "read_parquet('../data/processed/injury.parquet')"
+      - name: game_performance
+        description: "Post-match subjective performance ratings per player"
+        meta:
+          external_location: "read_parquet('../data/processed/game_performance.parquet')"
