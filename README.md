@@ -4,7 +4,7 @@
 
 🚀 **[Live Dashboard](https://soccer-performance-science.streamlit.app)** — Player Readiness App
 
-A player performance intelligence platform built on SoccerMon athlete monitoring data — modeling training load, readiness, and injury risk for elite soccer athletes.
+A player performance intelligence platform built on SoccerMon athlete monitoring data modeling training load, readiness, and injury risk for elite soccer athletes.
 
 ---
 
@@ -74,10 +74,10 @@ flowchart LR
 
 ```
 soccer-performance-science/
-├── 01_data_pipeline/        # Python ETL — ingest, validate, test
-├── 02_dbt_models/           # dbt Core — base, staging, mart layers
-├── 03_streamlit_app/        # Streamlit dashboard — 3 pages
-├── 04_prefect/              # Prefect orchestration — daily pipeline
+├── 01_data_pipeline/        # Python ETL: ingest → validate → test
+├── 02_dbt_models/           # dbt Core: base, staging, mart layers
+├── 03_streamlit_app/        # Streamlit dashboard: 3 pages
+├── 04_prefect/              # Prefect orchestration: daily pipeline
 └── data/
     ├── raw/                 # SoccerMon source CSVs (not committed)
     └── processed/           # Parquet outputs
@@ -88,8 +88,8 @@ soccer-performance-science/
 ## Key Insights from the Data
 
 - **TeamA showed consistently higher ACWR spikes** than TeamB throughout the 2021 season — suggesting different periodization philosophies between the two squads
-- **162 injury events across 50 players** over 2 seasons — 1.6 injuries per player per year, consistent with elite soccer benchmarks
-- **Wellness scores dip the day after match days** — validating the readiness model's classification logic against real athlete behavior
+- **162 injury events across 50 players** over 2 seasons: 1.6 injuries per player per year, consistent with elite soccer benchmarks
+- **Wellness scores dip the day after match days**, validating the readiness model's classification logic against real athlete behavior
 
 ---
 
