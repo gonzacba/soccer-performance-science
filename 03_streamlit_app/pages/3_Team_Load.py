@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from utils.data_loader import load_readiness
 
-st.set_page_config(page_title="Team Load", layout="wide")
+st.set_page_config(page_title="Team Load", layout="wide", page_icon=None)
 
 st.markdown("""
     <style>
@@ -23,7 +23,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("## 📊 Team Load")
+st.markdown('<h1 style="font-size:3rem; font-weight:800; color:#FAFAFA; border-bottom:3px solid #1D9E75; padding-bottom:0.4rem; margin-bottom:1rem;">Team Load</h1>', unsafe_allow_html=True)
 
 df = load_readiness()
 
@@ -49,7 +49,6 @@ else:
 if selected_team != "All":
     filtered = filtered[filtered["team"] == selected_team]
 
-# Summary metrics
 col1, col2, col3, col4 = st.columns(4)
 avg_load = round(float(filtered["daily_load"].mean()), 1) if not filtered.empty else 0
 avg_acwr = round(float(filtered["acwr"].mean()), 2) if not filtered.empty else 0
@@ -68,7 +67,6 @@ with col4:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Weekly load chart
 st.markdown("#### Weekly Team Load")
 filtered["week"] = filtered["date"].dt.to_period("W").dt.start_time
 weekly = filtered.groupby(["week", "team"])["daily_load"].sum().reset_index()
@@ -98,16 +96,12 @@ st.plotly_chart(fig_weekly, use_container_width=True)
 
 st.markdown("---")
 
-# Heatmap
 st.markdown("#### Daily Load Heatmap — Player × Day")
 
 heatmap_data = filtered[filtered["daily_load"].notna()].copy()
 heatmap_data["date_str"] = heatmap_data["date"].dt.strftime("%m/%d")
 
 player_map = {}
-for team in df["team"].unique():
-    team_players = sorted(df[df["player_id"] == df["player_id"]]["player_id"].unique())
-
 for team in heatmap_data["team"].unique():
     team_players = sorted(heatmap_data[heatmap_data["team"] == team]["player_id"].unique())
     for i, pid in enumerate(team_players, 1):
@@ -138,6 +132,9 @@ if not pivot.empty:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         xaxis_tickangle=-45,
-        coloraxis_colorbar=dict(tickfont=dict(color="#FAFAFA"), title=dict(text="Load", font=dict(color="#FAFAFA"))),
+        coloraxis_colorbar=dict(
+            tickfont=dict(color="#FAFAFA"),
+            title=dict(text="Load", font=dict(color="#FAFAFA"))
+        ),
     )
     st.plotly_chart(fig_heat, use_container_width=True)

@@ -1,5 +1,4 @@
 import streamlit as st
-import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import sys
@@ -8,7 +7,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from utils.data_loader import load_readiness, load_injury_risk, STATUS_COLORS, RISK_COLORS
 
-st.set_page_config(page_title="Player Drill-Down", layout="wide")
+st.set_page_config(page_title="Player Drill-Down", layout="wide", page_icon=None)
 
 st.markdown("""
     <style>
@@ -20,16 +19,23 @@ st.markdown("""
         }
         .metric-value { font-size: 2rem; font-weight: 700; margin: 0; }
         .metric-label { font-size: 0.85rem; color: #9B9A96; margin: 0; }
-        .section-title { font-size: 1.1rem; font-weight: 600; color: #FAFAFA; margin-bottom: 0.5rem; }
+        .player-info {
+            font-size: 1rem;
+            color: #9B9A96;
+            margin-bottom: 1.5rem;
+        }
+        .player-info strong {
+            color: #FAFAFA;
+            font-size: 1.05rem;
+        }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("## 👤 Player Drill-Down")
+st.markdown('<h1 style="font-size:3rem; font-weight:800; color:#FAFAFA; border-bottom:3px solid #1D9E75; padding-bottom:0.4rem; margin-bottom:1rem;">Player Drill-Down</h1>', unsafe_allow_html=True)
 
 df = load_readiness()
 risk_df = load_injury_risk()
 
-# Build short player labels
 player_map = {}
 for team in df["team"].unique():
     team_players = sorted(df[df["team"] == team]["player_id"].unique())
@@ -59,7 +65,17 @@ row = today.iloc[0]
 status = row["readiness_status"]
 status_color = STATUS_COLORS.get(status, "#888")
 
-st.markdown(f"### {selected_label} &nbsp;|&nbsp; {selected_team} &nbsp;|&nbsp; {selected_date} &nbsp; <span style='color:{status_color}; font-size:1rem;'>● {status}</span>", unsafe_allow_html=True)
+st.markdown(f"""
+    <div class="player-info">
+        <strong>{selected_label}</strong>
+        <span style="margin: 0 0.5rem; color:#2A2D34;">|</span>
+        {selected_team}
+        <span style="margin: 0 0.5rem; color:#2A2D34;">|</span>
+        {selected_date}
+        <span style="margin-left:1rem; color:{status_color}; font-weight:600;">● {status}</span>
+    </div>
+""", unsafe_allow_html=True)
+
 st.markdown("---")
 
 col1, col2, col3, col4 = st.columns(4)
@@ -84,7 +100,6 @@ with col4:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ACWR trend
 last_30 = player_df[player_df["date"].dt.date <= selected_date].tail(30)
 
 fig_acwr = go.Figure()
@@ -100,7 +115,7 @@ fig_acwr.add_trace(go.Scatter(
 fig_acwr.add_hline(y=1.5, line_dash="dash", line_color="#D85A30", opacity=0.6)
 fig_acwr.add_hline(y=0.8, line_dash="dash", line_color="#1D9E75", opacity=0.6)
 fig_acwr.update_layout(
-    title="Acute:Chronic Workload Ratio — Last 30 Days",
+    title=dict(text="Acute:Chronic Workload Ratio — Last 30 Days", font=dict(size=14)),
     height=320,
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",

@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from utils.data_loader import load_readiness, STATUS_EMOJI, STATUS_COLORS
 
-st.set_page_config(page_title="Squad Overview", layout="wide")
+st.set_page_config(page_title="Squad Overview", layout="wide", page_icon=None)
 
 st.markdown("""
     <style>
@@ -27,7 +27,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("## 🏟️ Squad Overview")
+st.markdown('<h1 style="font-size:3rem; font-weight:800; color:#FAFAFA; border-bottom:3px solid #1D9E75; padding-bottom:0.4rem; margin-bottom:1rem;">Squad Overview</h1>', unsafe_allow_html=True)
 
 df = load_readiness()
 
@@ -51,11 +51,11 @@ col1, col2, col3, col4 = st.columns(4)
 with col1:
     st.markdown(f'<div class="metric-card"><p class="metric-value total-val">{total}</p><p class="metric-label">Total Players</p></div>', unsafe_allow_html=True)
 with col2:
-    st.markdown(f'<div class="metric-card"><p class="metric-value ready-val">{ready}</p><p class="metric-label">🟢 Ready</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="metric-card"><p class="metric-value ready-val">{ready}</p><p class="metric-label">Ready</p></div>', unsafe_allow_html=True)
 with col3:
-    st.markdown(f'<div class="metric-card"><p class="metric-value monitor-val">{monitor}</p><p class="metric-label">🟡 Monitor</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="metric-card"><p class="metric-value monitor-val">{monitor}</p><p class="metric-label">Monitor</p></div>', unsafe_allow_html=True)
 with col4:
-    st.markdown(f'<div class="metric-card"><p class="metric-value load-val">{load_managed}</p><p class="metric-label">🔴 Load-Managed</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="metric-card"><p class="metric-value load-val">{load_managed}</p><p class="metric-label">Load-Managed</p></div>', unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
