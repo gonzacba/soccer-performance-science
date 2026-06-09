@@ -11,39 +11,47 @@ A player performance intelligence platform built on SoccerMon athlete monitoring
 ## Architecture
 
 ```mermaid
-flowchart TD
-    A[SoccerMon Open Data\nZenodo · CC BY 4.0] --> B
+flowchart LR
+    SRC([SoccerMon\nOpen Data]):::source
 
-    subgraph B[01_data_pipeline]
-        B1[ingest.py\nwide to long · Parquet] --> B2[validate.py\nPandera schemas]
-        B2 --> B3[pytest · 7 tests]
+    subgraph P1["01 · Data Pipeline"]
+        direction TB
+        ING["ingest.py\n16 CSVs → Parquet"]
+        VAL["validate.py\nPandera · 4 schemas"]
+        TST["pytest · 7 tests"]
+        ING --> VAL --> TST
     end
 
-    B --> C[(data/processed/\nwellness · training_load\ninjury · game_performance)]
-
-    C --> D
-
-    subgraph D[02_dbt_models · DuckDB]
-        D1[base/\nclean + cast] --> D2[staging/\njoin + composite score]
-        D2 --> D3[marts/\nreadiness + injury risk]
-        D3 --> D4[schema.yml\n21 dbt tests]
+    subgraph P2["02 · dbt Models · DuckDB"]
+        direction TB
+        BASE["base · clean + cast"]
+        STG["staging · join + ACWR score"]
+        MRT["marts · readiness + injury risk"]
+        DBT["21 dbt tests"]
+        BASE --> STG --> MRT --> DBT
     end
 
-    D --> E[(soccer_performance.duckdb\nmart_readiness · mart_injury_risk)]
-
-    E --> F
-
-    subgraph F[03_streamlit_app]
-        F1[Squad Overview\ngreen · amber · red status]
-        F2[Player Drill-Down\nACWR trend · wellness radar]
-        F3[Team Load\nperiodization · heatmap]
+    subgraph P3["03 · Streamlit Dashboard"]
+        direction TB
+        PG1["Squad Overview\ngreen · amber · red"]
+        PG2["Player Drill-Down\nACWR · wellness radar"]
+        PG3["Team Load\nheatmap · periodization"]
     end
 
-    G[04_prefect\nDaily 6AM schedule] -->|orchestrates| B
-    G -->|orchestrates| D
-    G -->|verifies| E
+    subgraph P4["04 · Prefect Orchestration"]
+        direction TB
+        SCH["Daily 6AM\ningest → dbt → verify"]
+    end
 
-    F --> H[Live Dashboard\nsoccer-performance-science.streamlit.app]
+    SRC --> P1
+    P1 --> P2
+    P2 --> P3
+    P4 -->|orchestrates| P1
+    P4 -->|orchestrates| P2
+    P3 --> LIVE([Live · streamlit.app]):::live
+
+    classDef source fill:#1D9E75,stroke:#1D9E75,color:#fff
+    classDef live fill:#1D9E75,stroke:#1D9E75,color:#fff
 ```
 
 ---
@@ -109,6 +117,6 @@ streamlit run app.py
 
 ## Data Source
 
-SoccerMon: A Soccer Monitoring Dataset
-Zenodo · https://zenodo.org/records/10033832
+SoccerMon: A Soccer Monitoring Dataset  
+Zenodo · https://zenodo.org/records/10033832  
 License: CC BY 4.0
