@@ -63,8 +63,8 @@ st.markdown(f"### {selected_label} &nbsp;|&nbsp; {selected_team} &nbsp;|&nbsp; {
 st.markdown("---")
 
 col1, col2, col3, col4 = st.columns(4)
-wellness = round(row["wellness_score"], 2) if pd.notna(row["wellness_score"]) else "N/A"
-acwr = round(row["acwr"], 3) if pd.notna(row["acwr"]) else "N/A"
+wellness = round(float(row["wellness_score"]), 2) if pd.notna(row["wellness_score"]) else "N/A"
+acwr = round(float(row["acwr"]), 3) if pd.notna(row["acwr"]) else "N/A"
 load = int(row["daily_load"]) if pd.notna(row["daily_load"]) else "N/A"
 
 acwr_color = "#1D9E75" if isinstance(acwr, float) and 0.8 <= acwr <= 1.3 else "#EF9F27" if isinstance(acwr, float) and acwr <= 1.5 else "#D85A30"
