@@ -2,9 +2,9 @@
 
 ![CI](https://github.com/gonzacba/soccer-performance-science/actions/workflows/ci.yml/badge.svg)
 
-🚀 **[Live Dashboard](https://soccer-performance-science.streamlit.app)** — Player Readiness App
+🚀 **[Live Dashboard](https://soccer-performance-science.streamlit.app)** → Player Readiness App
 
-A player performance intelligence platform built on SoccerMon athlete monitoring data modeling training load, readiness, and injury risk for elite soccer athletes.
+A player performance intelligence platform built on SoccerMon athlete monitoring data, modeling training load, readiness, and injury risk for elite soccer athletes.
 
 ---
 
@@ -12,35 +12,34 @@ A player performance intelligence platform built on SoccerMon athlete monitoring
 
 ```mermaid
 flowchart LR
-    SRC([SoccerMon\nOpen Data]):::source
+    SRC([SoccerMon Open Data])
 
     subgraph P1["01 · Data Pipeline"]
         direction TB
-        ING["ingest.py\n16 CSVs → Parquet"]
-        VAL["validate.py\nPandera · 4 schemas"]
-        TST["pytest · 7 tests"]
+        ING["ingest.py — 16 CSVs to Parquet"]
+        VAL["validate.py — Pandera schemas"]
+        TST["pytest — 7 tests"]
         ING --> VAL --> TST
     end
 
-    subgraph P2["02 · dbt Models · DuckDB"]
+    subgraph P2["02 · dbt Models — DuckDB"]
         direction TB
-        BASE["base · clean + cast"]
-        STG["staging · join + ACWR score"]
-        MRT["marts · readiness + injury risk"]
+        BASE["base — clean + cast"]
+        STG["staging — join + ACWR score"]
+        MRT["marts — readiness + injury risk"]
         DBT["21 dbt tests"]
         BASE --> STG --> MRT --> DBT
     end
 
     subgraph P3["03 · Streamlit Dashboard"]
         direction TB
-        PG1["Squad Overview\ngreen · amber · red"]
-        PG2["Player Drill-Down\nACWR · wellness radar"]
-        PG3["Team Load\nheatmap · periodization"]
+        PG1["Squad Overview"]
+        PG2["Player Drill-Down"]
+        PG3["Team Load"]
     end
 
-    subgraph P4["04 · Prefect Orchestration"]
-        direction TB
-        SCH["Daily 6AM\ningest → dbt → verify"]
+    subgraph P4["04 · Prefect"]
+        SCH["Daily 6AM schedule"]
     end
 
     SRC --> P1
@@ -48,10 +47,14 @@ flowchart LR
     P2 --> P3
     P4 -->|orchestrates| P1
     P4 -->|orchestrates| P2
-    P3 --> LIVE([Live · streamlit.app]):::live
+    P3 --> LIVE([Live Dashboard — streamlit.app])
 
-    classDef source fill:#1D9E75,stroke:#1D9E75,color:#fff
-    classDef live fill:#1D9E75,stroke:#1D9E75,color:#fff
+    style P1 fill:#003366,stroke:#003366,color:#fff
+    style P2 fill:#003366,stroke:#003366,color:#fff
+    style P3 fill:#003366,stroke:#003366,color:#fff
+    style P4 fill:#CC0000,stroke:#CC0000,color:#fff
+    style SRC fill:#126BD9,stroke:#126BD9,color:#fff
+    style LIVE fill:#126BD9,stroke:#126BD9,color:#fff
 ```
 
 ---
@@ -74,7 +77,7 @@ flowchart LR
 
 ```
 soccer-performance-science/
-├── 01_data_pipeline/        # Python ETL: ingest → validate → test
+├── 01_data_pipeline/        # Python ETL: ingest, validate, test
 ├── 02_dbt_models/           # dbt Core: base, staging, mart layers
 ├── 03_streamlit_app/        # Streamlit dashboard: 3 pages
 ├── 04_prefect/              # Prefect orchestration: daily pipeline
